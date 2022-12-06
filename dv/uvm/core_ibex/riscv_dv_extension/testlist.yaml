@@ -1105,4 +1105,6 @@
 - test: empty
   desc: >
     Empty directed test
+  is_directed: True
+  rtl_test: core_ibex_empty_test
   iterations: 1
