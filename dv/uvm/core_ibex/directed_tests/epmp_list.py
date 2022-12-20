@@ -749,9 +749,10 @@ def list_tests():
 
 def append_directed_testlist(testlist_name, testlist_to_add):
     testlist_string = ""
-    for test_name in testlist_to_add:
+    for test_str in testlist_to_add:
+        test_name = test_str.split('.')[0]
         testlist_string = testlist_string + '''
-    - test: {test_name}
+- test: {test_name}
   desc: >
     PMP directed test - {test_name}
   iterations: 1
@@ -789,4 +790,4 @@ epmp_testlist = list_tests("/home/saad/work/epmp/riscv-isa-sim/tests/mseccfg/gen
 copy_tests(epmp_testlist, "/home/saad/work/epmp/riscv-isa-sim/tests/mseccfg/gengen_src/outputs", "/home/saad/work/final_changes/ibex/dv/uvm/core_ibex/directed_tests")
 #print(epmp_testlist)
 #epmp_testlist = list_tests()
-#append_directed_testlist('directed_testlist.yaml', epmp_testlist)
+append_directed_testlist('directed_testlist.yaml', epmp_testlist)
