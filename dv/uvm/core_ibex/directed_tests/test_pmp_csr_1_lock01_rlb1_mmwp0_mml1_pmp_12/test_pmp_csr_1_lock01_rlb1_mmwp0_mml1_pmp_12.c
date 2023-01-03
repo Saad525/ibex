@@ -54,11 +54,7 @@ typedef unsigned long uintptr_t;
 /*
  * functions from syscalls.c
  */
-#if PRINTF_SUPPORTED
-int printf(const char* fmt, ...);
-#else
-#define printf(...)
-#endif
+
 
 void __attribute__((noreturn)) tohost_exit(uintptr_t code);
 void exit(int code);
@@ -218,7 +214,7 @@ static void set_cfg() {
             : "r"(wval)
               : "memory");
     if (wval != rval) {
-        printf("pmpaddr7 expects %lx vs %lx\n", wval, rval);
+        "pmpaddr7 expects %lx vs %lx\n", wval, rval);
         actual_pmpaddr_fail = 1;
     }
     
@@ -236,7 +232,7 @@ static void set_cfg() {
             : "r"(wval)
               : "memory");
     if (wval != rval) {
-        printf("pmpcfg expects %lx vs %lx\n", wval, rval);
+        "pmpcfg expects %lx vs %lx\n", wval, rval);
         actual_pmpcfg_fail = 1;
     }
 #else

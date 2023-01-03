@@ -51,11 +51,7 @@ typedef unsigned long uintptr_t;
 /*
  * functions from syscalls.c
  */
-#if PRINTF_SUPPORTED
-int printf(const char* fmt, ...);
-#else
-#define printf(...)
-#endif
+
 
 void __attribute__((noreturn)) tohost_exit(uintptr_t code);
 void exit(int code);
@@ -92,7 +88,7 @@ uintptr_t handle_trap(uintptr_t cause, uintptr_t epc, uintptr_t regs[32])
     } else if (cause == CAUSE_LOAD_ACCESS || cause == CAUSE_STORE_ACCESS) {
         reg_t addr;
         asm volatile ("csrr %0, mtval\n" : "=r"(addr));
-//        printf("addr = 0x%x\n", addr);
+//        "addr = 0x%x\n", addr);
         if (addr >= TEST_MEM_START && addr < TEST_MEM_END) {
             if (cause == CAUSE_LOAD_ACCESS)
                 actual_r_fail = 1;
@@ -108,7 +104,7 @@ uintptr_t handle_trap(uintptr_t cause, uintptr_t epc, uintptr_t regs[32])
         }
     }
     
-    printf("cause = %ld, epc = 0x%lx\n", cause, epc);
+    "cause = %ld, epc = 0x%lx\n", cause, epc);
     tohost_exit(1337);
 }
 
@@ -270,18 +266,18 @@ static void checkTestResult() {
     int ret = 0;
     if (expected_r_fail != actual_r_fail) {
         ret += 1;
-        printf("Read test fail, expected %d, actual %d.\n", expected_r_fail, actual_r_fail);
+        "Read test fail, expected %d, actual %d.\n", expected_r_fail, actual_r_fail);
     }
     if (expected_w_fail != actual_w_fail) {
         ret += 2;
-        printf("Write test fail, expected %d, actual %d.\n", expected_w_fail, actual_w_fail);
+        "Write test fail, expected %d, actual %d.\n", expected_w_fail, actual_w_fail);
     }
     if (expected_x_fail != actual_x_fail) {
         ret += 4;
-        printf("Fetch test fail, expected %d, actual %d.\n", expected_x_fail, actual_x_fail);
+        "Fetch test fail, expected %d, actual %d.\n", expected_x_fail, actual_x_fail);
     }
     
-    printf("Test done, exit %d.\n", ret);
+    "Test done, exit %d.\n", ret);
     
     exit(ret); 
 }

@@ -53,11 +53,7 @@ typedef unsigned long uintptr_t;
 /*
  * functions from syscalls.c
  */
-#if PRINTF_SUPPORTED
-int printf(const char* fmt, ...);
-#else
-#define printf(...)
-#endif
+
 
 void __attribute__((noreturn)) tohost_exit(uintptr_t code);
 void exit(int code);
@@ -102,7 +98,7 @@ uintptr_t handle_trap(uintptr_t cause, uintptr_t epc, uintptr_t regs[32])
         }
     }
     
-    printf("cause = %ld, epc = 0x%lx\n", cause, epc);
+    "cause = %ld, epc = 0x%lx\n", cause, epc);
     tohost_exit(1337);
 }
 

@@ -54,11 +54,7 @@ typedef unsigned long uintptr_t;
 /*
  * functions from syscalls.c
  */
-#if PRINTF_SUPPORTED
-int printf(const char* fmt, ...);
-#else
-#define printf(...)
-#endif
+
 
 void __attribute__((noreturn)) tohost_exit(uintptr_t code);
 void exit(int code);
@@ -88,7 +84,7 @@ static void checkTestResult(void);
  */
 uintptr_t handle_trap(uintptr_t cause, uintptr_t epc, uintptr_t regs[32])
 { 
-    printf("cause = %ld, epc = 0x%lx\n", cause, epc);
+    "cause = %ld, epc = 0x%lx\n", cause, epc);
     tohost_exit(1337);
 }
 
@@ -219,7 +215,7 @@ static void set_cfg() {
             : "r"(wval)
               : "memory");
     if (wval != rval) {
-        printf("pmpaddr12 expects %lx vs %lx\n", wval, rval);
+        "pmpaddr12 expects %lx vs %lx\n", wval, rval);
         actual_pmpaddr_fail = 1;
     }
     
@@ -237,7 +233,7 @@ static void set_cfg() {
             : "r"(wval)
               : "memory");
     if (wval != rval) {
-        printf("pmpcfg expects %lx vs %lx\n", wval, rval);
+        "pmpcfg expects %lx vs %lx\n", wval, rval);
         actual_pmpcfg_fail = 1;
     }
 #else
@@ -291,20 +287,20 @@ static void checkTestResult() {
     int ret = 0;
     if (expected_seccfg_fail != actual_seccfg_fail) {
         ret += 1;
-        printf("Access seccfg fail, expected %d, actual %d.\n", expected_seccfg_fail, actual_seccfg_fail);
+        "Access seccfg fail, expected %d, actual %d.\n", expected_seccfg_fail, actual_seccfg_fail);
     }
 
     if (expected_pmpaddr_fail != actual_pmpaddr_fail) {
         ret += 2;
-        printf("Access pmpaddr fail, expected %d, actual %d.\n", expected_pmpaddr_fail, actual_pmpaddr_fail);
+        "Access pmpaddr fail, expected %d, actual %d.\n", expected_pmpaddr_fail, actual_pmpaddr_fail);
     }
     
     if (expected_pmpcfg_fail != actual_pmpcfg_fail) {
         ret += 4;
-        printf("Access pmpcfg fail, expected %d, actual %d.\n", expected_pmpcfg_fail, actual_pmpcfg_fail);
+        "Access pmpcfg fail, expected %d, actual %d.\n", expected_pmpcfg_fail, actual_pmpcfg_fail);
     }
     
-    printf("Test done, exit %d.\n", ret);
+    "Test done, exit %d.\n", ret);
     
     exit(ret); 
 }
