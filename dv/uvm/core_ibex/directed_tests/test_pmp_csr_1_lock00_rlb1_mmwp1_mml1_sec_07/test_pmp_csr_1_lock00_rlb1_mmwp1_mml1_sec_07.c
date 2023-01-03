@@ -88,12 +88,11 @@ static void checkTestResult(void);
  */
 uintptr_t handle_trap(uintptr_t cause, uintptr_t epc, uintptr_t regs[32])
 { 
-    printf("cause = %ld, epc = 0x%lx\n", cause, epc);
     tohost_exit(1337);
 }
 
 
-__attribute ((section(".text_test_foo"), noinline))
+__attribute ((noinline))
 void target_foo() {
     asm volatile ("nop");
 }
@@ -142,8 +141,8 @@ static void set_cfg() {
     reg_t cfg0 = (PMP_R | PMP_W | PMP_X | PMP_NAPOT);
 #else
     asm volatile ("csrw pmpaddr6, %0 \n" :: "r"(TEST_MEM_START >> 2) : "memory"); // for data
-    asm volatile ("csrw pmpaddr5, %0 \n" :: "r"(0x110000 >> 2) : "memory");       // for code
-    asm volatile ("csrw pmpaddr4, %0 \n" :: "r"(0x100000 >> 2) : "memory");       // addr start
+    asm volatile ("csrw pmpaddr5, %0 \n" :: "r"(0x80010000 >> 2) : "memory");       // for code
+    asm volatile ("csrw pmpaddr4, %0 \n" :: "r"(0x80000000 >> 2) : "memory");       // addr start
     reg_t cfg0 = PMP_OFF;
     reg_t cfg1 = PMP_OFF | ((PMP_R | PMP_W | PMP_TOR) << 16) | ((PMP_X | PMP_TOR) << 8);
 #endif
@@ -291,20 +290,16 @@ static void checkTestResult() {
     int ret = 0;
     if (expected_seccfg_fail != actual_seccfg_fail) {
         ret += 1;
-        printf("Access seccfg fail, expected %d, actual %d.\n", expected_seccfg_fail, actual_seccfg_fail);
     }
 
     if (expected_pmpaddr_fail != actual_pmpaddr_fail) {
         ret += 2;
-        printf("Access pmpaddr fail, expected %d, actual %d.\n", expected_pmpaddr_fail, actual_pmpaddr_fail);
     }
     
     if (expected_pmpcfg_fail != actual_pmpcfg_fail) {
         ret += 4;
-        printf("Access pmpcfg fail, expected %d, actual %d.\n", expected_pmpcfg_fail, actual_pmpcfg_fail);
     }
     
-    printf("Test done, exit %d.\n", ret);
     
     exit(ret); 
 }

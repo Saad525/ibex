@@ -28,7 +28,7 @@ ENTRY(_start)
 
 SECTIONS
 {
-    . = 0x100000;
+    . = 0x80000000;
     __global_pointer$ = 0x140000;
     
     .text : ALIGN(256) { 

@@ -92,7 +92,6 @@ uintptr_t handle_trap(uintptr_t cause, uintptr_t epc, uintptr_t regs[32])
     } else if (cause == CAUSE_LOAD_ACCESS || cause == CAUSE_STORE_ACCESS) {
         reg_t addr;
         asm volatile ("csrr %0, mtval\n" : "=r"(addr));
-//        printf("addr = 0x%x\n", addr);
         if (addr >= TEST_MEM_START && addr < TEST_MEM_END) {
             if (cause == CAUSE_LOAD_ACCESS)
                 actual_r_fail = 1;
@@ -134,7 +133,7 @@ static void target_foo() {
 /*
  * avoid to access actual_x_fail lies in M mode
  */
-__attribute ((section(".text_test_foo"), noinline))
+__attribute ((noinline))
 static void target_foo_umode() {
     asm volatile ("nop");
 }
@@ -172,8 +171,8 @@ static void set_cfg() {
     reg_t cfg0 = (PMP_R | PMP_W | PMP_X | PMP_NAPOT);
 #else
     asm volatile ("csrw pmpaddr6, %0 \n" :: "r"(TEST_MEM_START >> 2) : "memory"); // for data
-    asm volatile ("csrw pmpaddr5, %0 \n" :: "r"(0x110000 >> 2) : "memory");       // for code
-    asm volatile ("csrw pmpaddr4, %0 \n" :: "r"(0x100000 >> 2) : "memory");       // addr start
+    asm volatile ("csrw pmpaddr5, %0 \n" :: "r"(0x80010000 >> 2) : "memory");       // for code
+    asm volatile ("csrw pmpaddr4, %0 \n" :: "r"(0x80000000 >> 2) : "memory");       // addr start
     reg_t cfg0 = PMP_OFF;
     reg_t cfg1 = PMP_OFF | ((PMP_R | PMP_W | PMP_TOR) << 16) | ((PMP_X | PMP_TOR) << 8);
 #endif
@@ -270,18 +269,14 @@ static void checkTestResult() {
     int ret = 0;
     if (expected_r_fail != actual_r_fail) {
         ret += 1;
-        printf("Read test fail, expected %d, actual %d.\n", expected_r_fail, actual_r_fail);
     }
     if (expected_w_fail != actual_w_fail) {
         ret += 2;
-        printf("Write test fail, expected %d, actual %d.\n", expected_w_fail, actual_w_fail);
     }
     if (expected_x_fail != actual_x_fail) {
         ret += 4;
-        printf("Fetch test fail, expected %d, actual %d.\n", expected_x_fail, actual_x_fail);
     }
     
-    printf("Test done, exit %d.\n", ret);
     
     exit(ret); 
 }
