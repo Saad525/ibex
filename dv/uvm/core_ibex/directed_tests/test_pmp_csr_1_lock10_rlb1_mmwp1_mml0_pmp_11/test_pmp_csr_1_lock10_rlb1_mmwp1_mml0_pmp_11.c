@@ -214,7 +214,7 @@ static void set_cfg() {
             : "r"(wval)
               : "memory");
     if (wval != rval) {
-        "pmpaddr15 expects %lx vs %lx\n", wval, rval);
+
         actual_pmpaddr_fail = 1;
     }
     
@@ -232,7 +232,7 @@ static void set_cfg() {
             : "r"(wval)
               : "memory");
     if (wval != rval) {
-        "pmpcfg expects %lx vs %lx\n", wval, rval);
+
         actual_pmpcfg_fail = 1;
     }
 #else

@@ -84,7 +84,7 @@ static void checkTestResult(void);
  */
 uintptr_t handle_trap(uintptr_t cause, uintptr_t epc, uintptr_t regs[32])
 { 
-    "cause = %ld, epc = 0x%lx\n", cause, epc);
+;
     tohost_exit(1337);
 }
 
@@ -215,7 +215,7 @@ static void set_cfg() {
             : "r"(wval)
               : "memory");
     if (wval != rval) {
-        "pmpaddr9 expects %lx vs %lx\n", wval, rval);
+
         actual_pmpaddr_fail = 1;
     }
     
@@ -233,7 +233,7 @@ static void set_cfg() {
             : "r"(wval)
               : "memory");
     if (wval != rval) {
-        "pmpcfg expects %lx vs %lx\n", wval, rval);
+
         actual_pmpcfg_fail = 1;
     }
 #else
@@ -287,20 +287,19 @@ static void checkTestResult() {
     int ret = 0;
     if (expected_seccfg_fail != actual_seccfg_fail) {
         ret += 1;
-        "Access seccfg fail, expected %d, actual %d.\n", expected_seccfg_fail, actual_seccfg_fail);
+
     }
 
     if (expected_pmpaddr_fail != actual_pmpaddr_fail) {
         ret += 2;
-        "Access pmpaddr fail, expected %d, actual %d.\n", expected_pmpaddr_fail, actual_pmpaddr_fail);
+
     }
     
     if (expected_pmpcfg_fail != actual_pmpcfg_fail) {
         ret += 4;
-        "Access pmpcfg fail, expected %d, actual %d.\n", expected_pmpcfg_fail, actual_pmpcfg_fail);
+
     }
     
-    "Test done, exit %d.\n", ret);
     
     exit(ret); 
 }

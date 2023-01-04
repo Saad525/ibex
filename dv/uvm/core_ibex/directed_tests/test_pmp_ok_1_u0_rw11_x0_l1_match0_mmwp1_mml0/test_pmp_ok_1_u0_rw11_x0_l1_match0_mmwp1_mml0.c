@@ -98,7 +98,7 @@ uintptr_t handle_trap(uintptr_t cause, uintptr_t epc, uintptr_t regs[32])
         }
     }
     
-    "cause = %ld, epc = 0x%lx\n", cause, epc);
+;
     tohost_exit(1337);
 }
 

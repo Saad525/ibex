@@ -13,6 +13,7 @@
 #endif
 
   .section ".text.init"
+  .org 0x80
   .globl _start
 _start:
   li  x1, 0

@@ -104,7 +104,7 @@ uintptr_t handle_trap(uintptr_t cause, uintptr_t epc, uintptr_t regs[32])
         }
     }
     
-    "cause = %ld, epc = 0x%lx\n", cause, epc);
+;
     tohost_exit(1337);
 }
 
@@ -266,18 +266,17 @@ static void checkTestResult() {
     int ret = 0;
     if (expected_r_fail != actual_r_fail) {
         ret += 1;
-        "Read test fail, expected %d, actual %d.\n", expected_r_fail, actual_r_fail);
+
     }
     if (expected_w_fail != actual_w_fail) {
         ret += 2;
-        "Write test fail, expected %d, actual %d.\n", expected_w_fail, actual_w_fail);
+
     }
     if (expected_x_fail != actual_x_fail) {
         ret += 4;
-        "Fetch test fail, expected %d, actual %d.\n", expected_x_fail, actual_x_fail);
+
     }
     
-    "Test done, exit %d.\n", ret);
     
     exit(ret); 
 }
