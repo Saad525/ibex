@@ -54,7 +54,11 @@ typedef unsigned long uintptr_t;
 /*
  * functions from syscalls.c
  */
-
+#if PRINTF_SUPPORTED
+int printf(const char* fmt, ...);
+#else
+#define printf(...)
+#endif
 
 void __attribute__((noreturn)) tohost_exit(uintptr_t code);
 void exit(int code);
@@ -62,8 +66,8 @@ void exit(int code);
 /*
  * local status
  */
-#define TEST_MEM_START 0x200000
-#define TEST_MEM_END 0x240000
+#define TEST_MEM_START 0x80200000
+#define TEST_MEM_END 0x80240000
 #define U_MEM_END (TEST_MEM_END + 0x10000)
 #define FAKE_ADDRESS 0x10000000
 
@@ -88,7 +92,7 @@ uintptr_t handle_trap(uintptr_t cause, uintptr_t epc, uintptr_t regs[32])
 }
 
 
-__attribute ((noinline))
+__attribute ((section(".text_test_foo"), noinline))
 void target_foo() {
     asm volatile ("nop");
 }
@@ -136,18 +140,21 @@ static void set_cfg() {
     asm volatile ("csrw pmpaddr0, %0 \n" :: "r"((TEST_MEM_START >> 3) - 1) : "memory");
     reg_t cfg0 = (PMP_R | PMP_W | PMP_X | PMP_NAPOT);
 #else
-    asm volatile ("csrw pmpaddr6, %0 \n" :: "r"(TEST_MEM_START >> 2) : "memory"); // for data
+    asm volatile ("csrw pmpaddr7, %0 \n" :: "r"(0x8ffffff8 >> 2) : "memory");       // for ibex signature addr
+    asm volatile ("csrw pmpaddr6, %0 \n" :: "r"(TEST_MEM_START >> 2) : "memory");   // for data
     asm volatile ("csrw pmpaddr5, %0 \n" :: "r"(0x80010000 >> 2) : "memory");       // for code
     asm volatile ("csrw pmpaddr4, %0 \n" :: "r"(0x80000000 >> 2) : "memory");       // addr start
     reg_t cfg0 = PMP_OFF;
-    reg_t cfg1 = PMP_OFF | ((PMP_R | PMP_W | PMP_TOR) << 16) | ((PMP_X | PMP_TOR) << 8);
+    reg_t cfg1 = PMP_OFF | ((PMP_R | PMP_W | PMP_NAPOT) << 24)
+                         | ((PMP_R | PMP_W | PMP_TOR) << 16) 
+                         | ((PMP_X | PMP_TOR) << 8);
 #endif
 
     if (1) {    // need to set L bit for M mode code access
 #if M_MODE_RWX
         cfg0 |= PMP_L;
 #else
-        cfg1 |= ((PMP_L << 8) | (PMP_L << 16));
+        cfg1 |= ((PMP_L << 8) | (PMP_L << 16) | (PMP_L << 24));
 #endif
     }
     
@@ -199,6 +206,7 @@ static void set_cfg() {
      * updated again when accessing pmpcfg.
      */
     reg_t wval = 0, rval;
+    reg_t prev_val = 0;
 #if 1
     asm volatile ("csrr %0, pmpaddr14 \n"
             : "=r"(rval));
@@ -208,16 +216,17 @@ static void set_cfg() {
     } else {
         wval = (rval << 1) + 65536;   
     }
+    prev_val = rval;
     asm volatile ("csrw pmpaddr14, %1 \n"
                 "\tcsrr %0, pmpaddr14 \n"
             : "=r"(rval)
             : "r"(wval)
               : "memory");
     if (wval != rval) {
-
         actual_pmpaddr_fail = 1;
     }
-    
+    asm volatile ("csrw pmpaddr14, %0 \n"
+            :: "r"(prev_val));
     // Update cfg0 to avoid changing idx other than 2
     asm volatile ("csrr %0, pmpcfg2 \n"
                     : "=r"(cfg0)
@@ -232,7 +241,6 @@ static void set_cfg() {
             : "r"(wval)
               : "memory");
     if (wval != rval) {
-
         actual_pmpcfg_fail = 1;
     }
 #else
@@ -248,7 +256,7 @@ static void set_cfg() {
 #if __riscv_xlen == 64
         asm volatile ("csrs pmpcfg0, %0 \n"::"r"(((reg_t)PMP_L << 40) | ((reg_t)PMP_L << 48)));
 #else
-        asm volatile ("csrs pmpcfg1, %0 \n"::"r"((PMP_L << 8) | (PMP_L << 16)));
+        asm volatile ("csrs pmpcfg1, %0 \n"::"r"((PMP_L << 8) | (PMP_L << 16) | (PMP_L << 24)));
 #endif // __riscv_xlen == 64
 #endif // M_MODE_RWX
     }

@@ -53,7 +53,11 @@ typedef unsigned long uintptr_t;
 /*
  * functions from syscalls.c
  */
-
+#if PRINTF_SUPPORTED
+int printf(const char* fmt, ...);
+#else
+#define printf(...)
+#endif
 
 void __attribute__((noreturn)) tohost_exit(uintptr_t code);
 void exit(int code);
@@ -61,8 +65,8 @@ void exit(int code);
 /*
  * local status
  */
-#define TEST_MEM_START 0x200000
-#define TEST_MEM_END 0x240000
+#define TEST_MEM_START 0x80200000
+#define TEST_MEM_END 0x80240000
 #define U_MEM_END (TEST_MEM_END + 0x10000)
 #define FAKE_ADDRESS 0x10000000
 
@@ -98,7 +102,6 @@ uintptr_t handle_trap(uintptr_t cause, uintptr_t epc, uintptr_t regs[32])
         }
     }
     
-;
     tohost_exit(1337);
 }
 
@@ -122,7 +125,7 @@ static void switch_mode() {
 #endif
 }
 
-__attribute ((noinline))
+__attribute ((section(".text_test_foo"), noinline))
 static void target_foo() {
     asm volatile ("nop");
     
@@ -215,11 +218,14 @@ static void set_cfg() {
     asm volatile ("csrw pmpaddr0, %0 \n" :: "r"((TEST_MEM_START >> 3) - 1) : "memory");
     reg_t cfg0 = (PMP_R | PMP_W | PMP_X | PMP_NAPOT);
 #else
-    asm volatile ("csrw pmpaddr6, %0 \n" :: "r"(TEST_MEM_START >> 2) : "memory"); // for data
+    asm volatile ("csrw pmpaddr7, %0 \n" :: "r"(0x8ffffff8 >> 2) : "memory");       // for ibex signature addr
+    asm volatile ("csrw pmpaddr6, %0 \n" :: "r"(TEST_MEM_START >> 2) : "memory");   // for data
     asm volatile ("csrw pmpaddr5, %0 \n" :: "r"(0x80010000 >> 2) : "memory");       // for code
     asm volatile ("csrw pmpaddr4, %0 \n" :: "r"(0x80000000 >> 2) : "memory");       // addr start
     reg_t cfg0 = PMP_OFF;
-    reg_t cfg1 = PMP_OFF | ((PMP_R | PMP_W | PMP_TOR) << 16) | ((PMP_X | PMP_TOR) << 8);
+    reg_t cfg1 = PMP_OFF | ((PMP_R | PMP_W | PMP_NAPOT) << 24)
+                         | ((PMP_R | PMP_W | PMP_TOR) << 16) 
+                         | ((PMP_X | PMP_TOR) << 8);
 #endif
     
     // Only true for Spike
@@ -232,7 +238,7 @@ static void set_cfg() {
 #if M_MODE_RWX
         cfg0 |= PMP_L;
 #else
-        cfg1 |= ((PMP_L << 8) | (PMP_L << 16));
+        cfg1 |= ((PMP_L << 8) | (PMP_L << 16) | (PMP_L << 24));
 #endif
     }
     

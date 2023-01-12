@@ -10,13 +10,13 @@ MEMORY
      * For easier handling, esp. when MML set, trap handler has separated stack at GP
      * - Currently allocate 0x140000. Just avoid overlap with _end.
      */
-    M_MEM (AX)  : ORIGIN = 0x100000, LENGTH = 1M
+    M_MEM (AX)  : ORIGIN = 0x80000000, LENGTH = 1M
             
     RESERVED  : ORIGIN = 0x000000, LENGTH = 1M
     
-    TEST_MEM (AX)  : ORIGIN = 0x200000, LENGTH = 256K
+    TEST_MEM (AX)  : ORIGIN = 0x80200000, LENGTH = 256K
     
-    U_MEM (AX)  : ORIGIN = 0x240000, LENGTH = 64K
+    U_MEM (AX)  : ORIGIN = 0x80240000, LENGTH = 64K
 }
 
 OUTPUT_ARCH( "riscv" )
@@ -29,7 +29,7 @@ ENTRY(_start)
 SECTIONS
 {
     . = 0x80000000;
-    __global_pointer$ = 0x140000;
+    __global_pointer$ = 0x80140000;
     
     .text : ALIGN(256) { 
         *(.text.init) 
@@ -70,7 +70,7 @@ SECTIONS
     }
     
     /* End of uninitalized data segement, as the start for 128KB stack + TLS */
-    _end = 0x180000;
+    _end = 0x80180000;
     
     .umode : { *(.text_umode) *(.data_umode) } > U_MEM
     

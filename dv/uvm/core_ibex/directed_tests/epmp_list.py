@@ -785,15 +785,14 @@ def copy_tests(testlist, dir_src, dir_dest):
     for test in testlist:
         test_dir = test.split('.c')[0]
         os.popen('mkdir '+test_dir)
-        #print('cp '+dir_src+'/'+test+' '+test_dir+'/'+test)
         os.popen('cp '+dir_src+'/'+test+' '+test_dir+'/'+test)
 
 def remove_epmp_tests():
     os.popen('rm -rf test_pmp_*')
 
 remove_epmp_tests()
-epmp_testlist = list_tests("/home/saad/work/epmp/riscv-isa-sim/tests/mseccfg/gengen_src/outputs")
-copy_tests(epmp_testlist, "/home/saad/work/epmp/riscv-isa-sim/tests/mseccfg/gengen_src/outputs", "/home/saad/work/harry_ibex/ibex/dv/uvm/core_ibex/directed_tests")
+epmp_testlist = list_tests("/home/saad/work/tests_epmp/riscv-isa-sim/tests/mseccfg/gengen_src/outputs")
+copy_tests(epmp_testlist, "/home/saad/work/tests_epmp/riscv-isa-sim/tests/mseccfg/gengen_src/outputs", "/home/saad/work/harry_ibex/ibex/dv/uvm/core_ibex/directed_tests")
 #print(epmp_testlist)
 #epmp_testlist = list_tests()
 append_directed_testlist('directed_testlist.yaml', epmp_testlist)
