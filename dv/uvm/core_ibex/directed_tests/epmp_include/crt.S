@@ -136,7 +136,8 @@ _start:
 
   j _init
 
-  .align 2
+  # mtvec.base must be 256 byte aligned - Ibex
+  .balign 256
 trap_entry:
   #addi sp, sp, -272
   # use shadow address
