@@ -161,15 +161,16 @@ static void set_cfg() {
      * Then use pmp2cfg for TEST_MEM. Both test code and data share PMP entrance.
      * Also use pmp3cfg for fixed U mode (U_MEM).
      */
+    asm volatile ("csrw pmpaddr7, %0 \n" :: "r"(0x8ffffff8 >> 2) : "memory");       // for ibex signature addr
     asm volatile ("csrw pmpaddr3, %0 \n" :: "r"(U_MEM_END >> 2) : "memory");
     asm volatile ("csrw pmpaddr2, %0 \n" :: "r"(TEST_MEM_END >> 2) : "memory");
     asm volatile ("csrw pmpaddr1, %0 \n" :: "r"((TEST_MEM_START) >> 2) : "memory");
     
 #if M_MODE_RWX
-    asm volatile ("csrw pmpaddr0, %0 \n" :: "r"((TEST_MEM_START >> 3) - 1) : "memory");
+    asm volatile ("csrw pmpaddr0, %0 \n" :: "r"((0x80000000 >> 2) | 0xfffff) : "memory");
     reg_t cfg0 = (PMP_R | PMP_W | PMP_X | PMP_NAPOT);
+    reg_t cfg1 = (PMP_R | PMP_W | PMP_NAPOT) << 24;
 #else
-    asm volatile ("csrw pmpaddr7, %0 \n" :: "r"(0x8ffffff8 >> 2) : "memory");       // for ibex signature addr
     asm volatile ("csrw pmpaddr6, %0 \n" :: "r"(TEST_MEM_START >> 2) : "memory");   // for data
     asm volatile ("csrw pmpaddr5, %0 \n" :: "r"(0x80010000 >> 2) : "memory");       // for code
     asm volatile ("csrw pmpaddr4, %0 \n" :: "r"(0x80000000 >> 2) : "memory");       // addr start
@@ -182,11 +183,11 @@ static void set_cfg() {
     // need to set L bit for M mode before set MML
 #if M_MODE_RWX
         cfg0 |= PMP_L;
+        cfg1 |= (PMP_L << 24);
 #else
         cfg1 |= ((PMP_L << 8) | (PMP_L << 16) | (PMP_L << 24));
 #endif
         
-#if !M_MODE_RWX
 #if __riscv_xlen == 64
     cfg0 |= (cfg1 << 32);
 #else
@@ -195,7 +196,6 @@ static void set_cfg() {
                 : "r"(cfg1)
                 : "memory");
 #endif // __riscv_xlen == 64
-#endif // !M_MODE_RWX
     
     asm volatile ("csrw pmpcfg0, %0 \n"
                 :
