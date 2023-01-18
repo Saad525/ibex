@@ -159,14 +159,14 @@
 
 #define RVTEST_CODE_BEGIN                                               \
         .section .text.init;                                            \
-        .align  6;                                                      \
+        .org 0x80;                                                      \
         .weak stvec_handler;                                            \
         .weak mtvec_handler;                                            \
         .globl _start;                                                  \
 _start:                                                                 \
         /* reset vector */                                              \
         j reset_vector;                                                 \
-        .align 2;                                                       \
+        .balign 256; /* ibex mtvec - 256 byte aligned */                \
 trap_vector:                                                            \
         /* test whether the test came from pass/fail */                 \
         csrr t5, mcause;                                                \
@@ -190,7 +190,9 @@ handle_exception:                                                       \
         /* some unhandlable exception occurred */                       \
   1:    ori TESTNUM, TESTNUM, 1337;                                     \
   write_tohost:                                                         \
-        sw TESTNUM, tohost, t5;                                         \
+        bne x0, TESTNUM, 3f;                                            \
+        RVTEST_FAIL;                                                    \
+        3:  RVTEST_PASS;                                                \
         j write_tohost;                                                 \
 reset_vector:                                                           \
         INIT_XREG;                                                      \

@@ -38,7 +38,6 @@
     PMPEnable: 1
   timeout_s: 300
 
-
 - test: test_pmp_csr_1_lock00_rlb0_mmwp0_mml0_pmp_01
   desc: >
     PMP directed test - test_pmp_csr_1_lock00_rlb0_mmwp0_mml0_pmp_01
@@ -5204,3 +5203,440 @@
   iterations: 1
   test_srcs: test_pmp_ok_share_1_r1_x1_cfgl1_typex1_umode1/test_pmp_ok_share_1_r1_x1_cfgl1_typex1_umode1.c
   config: epmp
+
+# riscv isa tests
+
+- test: rvc
+  desc: >
+    riscv isa test - rvc
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32uc/rvc.S
+  config: base
+    
+- test: div
+  desc: >
+    riscv isa test - div
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32um/div.S
+  config: base
+    
+- test: divu
+  desc: >
+    riscv isa test - divu
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32um/divu.S
+  config: base
+    
+- test: mulh
+  desc: >
+    riscv isa test - mulh
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32um/mulh.S
+  config: base
+    
+- test: mulhsu
+  desc: >
+    riscv isa test - mulhsu
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32um/mulhsu.S
+  config: base
+    
+- test: mulhu
+  desc: >
+    riscv isa test - mulhu
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32um/mulhu.S
+  config: base
+    
+- test: mul
+  desc: >
+    riscv isa test - mul
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32um/mul.S
+  config: base
+    
+- test: rem
+  desc: >
+    riscv isa test - rem
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32um/rem.S
+  config: base
+    
+- test: remu
+  desc: >
+    riscv isa test - remu
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32um/remu.S
+  config: base
+    
+- test: breakpoint
+  desc: >
+    riscv isa test - breakpoint
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32mi/breakpoint.S
+  config: base
+    
+- test: csr
+  desc: >
+    riscv isa test - csr
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32mi/csr.S
+  config: base
+    
+- test: illegal
+  desc: >
+    riscv isa test - illegal
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32mi/illegal.S
+  config: base
+    
+- test: lh-misaligned
+  desc: >
+    riscv isa test - lh-misaligned
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32mi/lh-misaligned.S
+  config: base
+    
+- test: lw-misaligned
+  desc: >
+    riscv isa test - lw-misaligned
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32mi/lw-misaligned.S
+  config: base
+    
+- test: ma_addr
+  desc: >
+    riscv isa test - ma_addr
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32mi/ma_addr.S
+  config: base
+    
+- test: ma_fetch
+  desc: >
+    riscv isa test - ma_fetch
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32mi/ma_fetch.S
+  config: base
+    
+- test: mcsr
+  desc: >
+    riscv isa test - mcsr
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32mi/mcsr.S
+  config: base
+    
+- test: sbreak
+  desc: >
+    riscv isa test - sbreak
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32mi/sbreak.S
+  config: base
+    
+- test: scall
+  desc: >
+    riscv isa test - scall
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32mi/scall.S
+  config: base
+    
+- test: shamt
+  desc: >
+    riscv isa test - shamt
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32mi/shamt.S
+  config: base
+    
+- test: sh-misaligned
+  desc: >
+    riscv isa test - sh-misaligned
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32mi/sh-misaligned.S
+  config: base
+    
+- test: sw-misaligned
+  desc: >
+    riscv isa test - sw-misaligned
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32mi/sw-misaligned.S
+  config: base
+    
+- test: zicntr
+  desc: >
+    riscv isa test - zicntr
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32mi/zicntr.S
+  config: base
+    
+- test: addi
+  desc: >
+    riscv isa test - addi
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/addi.S
+  config: base
+    
+- test: add
+  desc: >
+    riscv isa test - add
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/add.S
+  config: base
+    
+- test: andi
+  desc: >
+    riscv isa test - andi
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/andi.S
+  config: base
+    
+- test: and
+  desc: >
+    riscv isa test - and
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/and.S
+  config: base
+    
+- test: auipc
+  desc: >
+    riscv isa test - auipc
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/auipc.S
+  config: base
+    
+- test: beq
+  desc: >
+    riscv isa test - beq
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/beq.S
+  config: base
+    
+- test: bge
+  desc: >
+    riscv isa test - bge
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/bge.S
+  config: base
+    
+- test: bgeu
+  desc: >
+    riscv isa test - bgeu
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/bgeu.S
+  config: base
+    
+- test: blt
+  desc: >
+    riscv isa test - blt
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/blt.S
+  config: base
+    
+- test: bltu
+  desc: >
+    riscv isa test - bltu
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/bltu.S
+  config: base
+    
+- test: bne
+  desc: >
+    riscv isa test - bne
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/bne.S
+  config: base
+    
+- test: fence_i
+  desc: >
+    riscv isa test - fence_i
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/fence_i.S
+  config: base
+    
+- test: jalr
+  desc: >
+    riscv isa test - jalr
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/jalr.S
+  config: base
+    
+- test: jal
+  desc: >
+    riscv isa test - jal
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/jal.S
+  config: base
+    
+- test: lb
+  desc: >
+    riscv isa test - lb
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/lb.S
+  config: base
+    
+- test: lbu
+  desc: >
+    riscv isa test - lbu
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/lbu.S
+  config: base
+    
+- test: lh
+  desc: >
+    riscv isa test - lh
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/lh.S
+  config: base
+    
+- test: lhu
+  desc: >
+    riscv isa test - lhu
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/lhu.S
+  config: base
+    
+- test: lui
+  desc: >
+    riscv isa test - lui
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/lui.S
+  config: base
+    
+- test: lw
+  desc: >
+    riscv isa test - lw
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/lw.S
+  config: base
+    
+- test: ori
+  desc: >
+    riscv isa test - ori
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/ori.S
+  config: base
+    
+- test: or
+  desc: >
+    riscv isa test - or
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/or.S
+  config: base
+    
+- test: sb
+  desc: >
+    riscv isa test - sb
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/sb.S
+  config: base
+    
+- test: sh
+  desc: >
+    riscv isa test - sh
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/sh.S
+  config: base
+    
+- test: simple
+  desc: >
+    riscv isa test - simple
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/simple.S
+  config: base
+    
+- test: slli
+  desc: >
+    riscv isa test - slli
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/slli.S
+  config: base
+    
+- test: sll
+  desc: >
+    riscv isa test - sll
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/sll.S
+  config: base
+    
+- test: slti
+  desc: >
+    riscv isa test - slti
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/slti.S
+  config: base
+    
+- test: sltiu
+  desc: >
+    riscv isa test - sltiu
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/sltiu.S
+  config: base
+    
+- test: slt
+  desc: >
+    riscv isa test - slt
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/slt.S
+  config: base
+    
+- test: sltu
+  desc: >
+    riscv isa test - sltu
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/sltu.S
+  config: base
+    
+- test: srai
+  desc: >
+    riscv isa test - srai
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/srai.S
+  config: base
+    
+- test: sra
+  desc: >
+    riscv isa test - sra
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/sra.S
+  config: base
+    
+- test: srli
+  desc: >
+    riscv isa test - srli
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/srli.S
+  config: base
+    
+- test: srl
+  desc: >
+    riscv isa test - srl
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/srl.S
+  config: base
+    
+- test: sub
+  desc: >
+    riscv isa test - sub
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/sub.S
+  config: base
+    
+- test: sw
+  desc: >
+    riscv isa test - sw
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/sw.S
+  config: base
+    
+- test: xori
+  desc: >
+    riscv isa test - xori
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/xori.S
+  config: base
+    
+- test: xor
+  desc: >
+    riscv isa test - xor
+  iterations: 1
+  test_srcs: ../../../../vendor/riscv-tests/isa/rv32ui/xor.S
+  config: base
+    
